@@ -4,6 +4,7 @@ import {
   BESTIE_SYSTEM_PROMPT,
   buildBestieUserMessage,
 } from "@/lib/bestiePrompt";
+import { DEFAULT_PERSONALITY_ID, isPersonalityId } from "@/lib/personalities";
 import type { BestieRequest, BestieResponse } from "@/types";
 
 // Use the Node.js runtime so the OpenAI SDK and server-only env vars work.
@@ -36,7 +37,8 @@ export async function POST(request: Request) {
 
   const match = body.match?.trim();
   const moment = body.moment?.trim();
-  const vibe = body.vibe ?? "Friendly Bestie";
+  // Accept a known personality id; gracefully fall back otherwise.
+  const vibe = isPersonalityId(body.vibe) ? body.vibe : DEFAULT_PERSONALITY_ID;
 
   if (!match || !moment) {
     return NextResponse.json(

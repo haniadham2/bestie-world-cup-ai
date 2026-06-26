@@ -7,19 +7,23 @@ import ScreenContainer from "@/components/ScreenContainer";
 import Header from "@/components/Header";
 import MascotPlaceholder from "@/components/MascotPlaceholder";
 import MomentButton from "@/components/MomentButton";
+import PersonalityPicker from "@/components/PersonalityPicker";
 import ResponseCard, { type ResponseStatus } from "@/components/ResponseCard";
 import { MOMENTS } from "@/lib/moments";
 import { getMatchById } from "@/lib/matches";
 import { askBestie } from "@/services/bestie";
+import { usePersonality } from "@/hooks/usePersonality";
 import type { Moment } from "@/types";
 
 /**
  * Companion screen — Bestie sits next to you during the match.
- * Tapping a moment asks the AI and shows the reply in an animated card.
+ * Tapping a moment asks the AI (in the chosen personality) and shows the
+ * reply in an animated card.
  */
 export default function CompanionPage() {
   const params = useParams<{ matchId: string }>();
   const match = getMatchById(params.matchId);
+  const { personality, setPersonality } = usePersonality();
 
   const [status, setStatus] = useState<ResponseStatus>("idle");
   const [reply, setReply] = useState("");
@@ -40,7 +44,7 @@ export default function CompanionPage() {
       const text = await askBestie({
         match: matchLabel,
         moment: moment.label,
-        vibe: "Friendly Bestie",
+        vibe: personality,
       });
       setReply(text);
       setStatus("done");
@@ -55,7 +59,7 @@ export default function CompanionPage() {
 
       <div className="flex flex-col items-center gap-3 text-center">
         <MascotPlaceholder size="lg" />
-        <h1 className="text-3xl font-extrabold text-ink">
+        <h1 className="text-3xl font-extrabold text-ink sm:text-4xl">
           Bestie is watching with you
         </h1>
         {match && (
@@ -69,8 +73,13 @@ export default function CompanionPage() {
         </p>
       </div>
 
-      {/* Bestie's animated reply lives right under the intro. */}
-      <div className="mt-5 min-h-[1px]">
+      {/* Personality picker — choice persists in localStorage. */}
+      <div className="mt-6">
+        <PersonalityPicker selected={personality} onSelect={setPersonality} />
+      </div>
+
+      {/* Bestie's animated reply. */}
+      <div className="mt-4 min-h-[1px]">
         <ResponseCard
           status={status}
           reply={reply}
@@ -82,7 +91,7 @@ export default function CompanionPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15, duration: 0.4 }}
-        className="mt-7 grid grid-cols-2 gap-4"
+        className="mt-7 grid grid-cols-2 gap-4 sm:grid-cols-3"
       >
         {MOMENTS.map((moment) => (
           <MomentButton key={moment.id} moment={moment} onPress={handleMoment} />

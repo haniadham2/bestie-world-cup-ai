@@ -1,4 +1,5 @@
 import type { BestieRequest } from "@/types";
+import { getPersonality } from "@/lib/personalities";
 
 /**
  * Bestie's personality, encoded as a system prompt.
@@ -28,9 +29,13 @@ export function buildBestieUserMessage({
   moment,
   vibe,
 }: BestieRequest): string {
+  const personality = getPersonality(vibe);
+
   return `Match: ${match}
 Moment that just happened: ${moment}
-Vibe: ${vibe}
 
-In your Bestie voice, react to this moment and explain it simply (35 words max).`;
+Personality mode: ${personality.label}
+Voice for this reply: ${personality.style}
+
+Stay true to your core Bestie rules, react to this moment in the voice above, and explain it simply (35 words max).`;
 }

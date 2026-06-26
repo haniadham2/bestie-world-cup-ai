@@ -26,14 +26,28 @@ export interface Moment {
   emoji: string;
 }
 
-/** The tone Bestie speaks in. Room to grow in later sprints. */
-export type Vibe = "Friendly Bestie";
+/** The five tones Bestie can speak in. */
+export type PersonalityId = "cute" | "funny" | "hype" | "coach" | "beginner";
 
-/** Request body sent to POST /api/bestie. */
+/** A selectable personality mode shown in the picker. */
+export interface Personality {
+  id: PersonalityId;
+  label: string;
+  emoji: string;
+  /** Short subtitle under the label, e.g. "Big match energy". */
+  tagline: string;
+  /** Tone instruction injected into the AI prompt. */
+  style: string;
+}
+
+/**
+ * Request body sent to POST /api/bestie.
+ * `vibe` carries the selected personality id (API shape unchanged since v2).
+ */
 export interface BestieRequest {
   match: string;
   moment: string;
-  vibe: Vibe;
+  vibe: PersonalityId;
 }
 
 /** Successful response from POST /api/bestie. */

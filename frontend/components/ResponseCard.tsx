@@ -12,7 +12,6 @@ interface ResponseCardProps {
   reply?: string;
 }
 
-const THINKING_TEXT = "✨ Bestie is thinking...";
 const ERROR_TEXT = "Oops 💕 Bestie got a little confused. Try again.";
 
 /**
@@ -35,22 +34,24 @@ export default function ResponseCard({
           transition={{ type: "spring", stiffness: 300, damping: 24 }}
           role="status"
           aria-live="polite"
-          className="rounded-4xl bg-white p-6 shadow-soft"
+          className="rounded-4xl bg-white p-6 shadow-soft sm:p-7"
         >
           {momentLabel && status !== "error" && (
-            <span className="mb-3 inline-block rounded-full bg-lavender/40 px-3 py-1 text-xs font-extrabold text-ink/70">
+            <span className="mb-3 inline-block rounded-full bg-lavender/40 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-ink/70">
               {momentLabel}
             </span>
           )}
 
-          {status === "thinking" && <ThinkingText />}
+          {status === "thinking" && <ThinkingState />}
 
           {status === "done" && (
-            <p className="text-lg font-bold leading-snug text-ink">{reply}</p>
+            <p className="text-xl font-bold leading-relaxed tracking-[-0.01em] text-ink sm:text-2xl">
+              {reply}
+            </p>
           )}
 
           {status === "error" && (
-            <p className="text-lg font-bold leading-snug text-ink">
+            <p className="text-lg font-bold leading-relaxed text-ink">
               {ERROR_TEXT}
             </p>
           )}
@@ -60,17 +61,32 @@ export default function ResponseCard({
   );
 }
 
-/** Gently pulsing "thinking" line with three bouncing dots. */
-function ThinkingText() {
+/** "Bestie is thinking..." with three playful bouncing dots. */
+function ThinkingState() {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-3">
       <motion.span
-        animate={{ opacity: [0.6, 1, 0.6] }}
-        transition={{ duration: 1.4, repeat: Infinity }}
-        className="text-lg font-bold text-ink"
+        animate={{ opacity: [0.55, 1, 0.55] }}
+        transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+        className="text-lg font-extrabold text-ink"
       >
-        {THINKING_TEXT}
+        ✨ Bestie is thinking
       </motion.span>
+      <span className="flex items-end gap-1 pb-1" aria-hidden="true">
+        {[0, 1, 2].map((i) => (
+          <motion.span
+            key={i}
+            className="h-2 w-2 rounded-full bg-gradient-to-r from-bubblegum to-peach"
+            animate={{ y: [0, -6, 0] }}
+            transition={{
+              duration: 0.7,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.15,
+            }}
+          />
+        ))}
+      </span>
     </div>
   );
 }

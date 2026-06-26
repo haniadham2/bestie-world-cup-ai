@@ -12,8 +12,9 @@ interface ScreenContainerProps {
 }
 
 /**
- * Mobile-first page wrapper. Centers content in a phone-width column
- * and animates each screen in for smooth page transitions.
+ * Mobile-first page wrapper. Keeps a comfortable phone-width column on small
+ * screens and widens gently on desktop, with a little more breathing room.
+ * Animates each screen in for smooth page transitions.
  */
 export default function ScreenContainer({
   children,
@@ -32,7 +33,7 @@ export default function ScreenContainer({
         className
       )}
     >
-      <div className="mx-auto flex min-h-[100dvh] w-full max-w-md flex-col px-5 pb-10">
+      <div className="mx-auto flex min-h-[100dvh] w-full max-w-md flex-col px-5 pb-12 pt-2 sm:px-6 md:max-w-xl">
         {children}
       </div>
     </motion.main>
