@@ -45,7 +45,7 @@ interface Face {
 }
 
 const BASE_FACE: Record<BestieMood, Face> = {
-  idle: { pupilX: 0, pupilY: 0, eyeOpen: 1, mouth: "beak" },
+  idle: { pupilX: 0, pupilY: 0, eyeOpen: 1, mouth: "softSmile" },
   thinking: { pupilX: 2, pupilY: -5, eyeOpen: 1, mouth: "beak" },
   goal: { pupilX: 0, pupilY: 0, eyeOpen: 0.5, mouth: "smile" },
   yellow: { pupilX: 0, pupilY: 0, eyeOpen: 1.2, mouth: "oSmall" },
@@ -102,6 +102,12 @@ export default function Bestie({
             <stop offset="55%" stopColor="#FF8A5B" stopOpacity="0.45" />
             <stop offset="100%" stopColor="#FF8A5B" stopOpacity="0" />
           </radialGradient>
+          {/* Soft body gradient — a gentle highlight so Bestie reads round, not flat. */}
+          <radialGradient id="bestie-body" cx="42%" cy="34%" r="78%">
+            <stop offset="0%" stopColor="#FFE989" />
+            <stop offset="58%" stopColor="#FFD23F" />
+            <stop offset="100%" stopColor="#FFC525" />
+          </radialGradient>
         </defs>
 
         {/* Soft glow (warmer for Hype) */}
@@ -142,8 +148,8 @@ export default function Bestie({
             />
 
             {/* Body */}
-            <ellipse cx={110} cy={114} rx={62} ry={64} fill={C.body} />
-            <ellipse cx={110} cy={130} rx={42} ry={42} fill={C.belly} opacity={0.6} />
+            <ellipse cx={110} cy={115} rx={63} ry={65} fill="url(#bestie-body)" />
+            <ellipse cx={110} cy={132} rx={40} ry={40} fill={C.belly} opacity={0.45} />
 
             {/* Tuft */}
             <motion.g
@@ -161,11 +167,11 @@ export default function Bestie({
               transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
               style={{ transformBox: "view-box", transformOrigin: "110px 150px" }}
             >
-              <circle cx={80} cy={120} r={personality === "cute" ? 11 : 9} fill={C.cheek} opacity={personality === "cute" ? 0.85 : 0.7} />
-              <circle cx={140} cy={120} r={personality === "cute" ? 11 : 9} fill={C.cheek} opacity={personality === "cute" ? 0.85 : 0.7} />
+              <circle cx={76} cy={124} r={personality === "cute" ? 11 : 9.5} fill={C.cheek} opacity={personality === "cute" ? 0.85 : 0.72} />
+              <circle cx={144} cy={124} r={personality === "cute" ? 11 : 9.5} fill={C.cheek} opacity={personality === "cute" ? 0.85 : 0.72} />
 
-              <Eye cx={90} cy={101} face={face} reduce={!!reduce} blinkDelay={0} />
-              <Eye cx={130} cy={101} face={face} reduce={!!reduce} blinkDelay={0.04} />
+              <Eye cx={92} cy={103} face={face} reduce={!!reduce} blinkDelay={0} />
+              <Eye cx={128} cy={103} face={face} reduce={!!reduce} blinkDelay={0.04} />
 
               <Mouth type={face.mouth} />
 
@@ -296,7 +302,7 @@ function Eye({
         transition={{ duration: 5, times: [0, 0.93, 0.965, 1], repeat: Infinity, repeatDelay: blinkDelay, ease: "easeInOut" }}
         style={{ transformBox: "view-box", transformOrigin: origin }}
       >
-        <ellipse cx={cx} cy={cy} rx={12} ry={13} fill={C.white} />
+        <ellipse cx={cx} cy={cy} rx={13.5} ry={15} fill={C.white} />
         <motion.g
           animate={
             face.lookAround && !reduce
@@ -309,8 +315,8 @@ function Eye({
               : { type: "spring", stiffness: 300, damping: 20 }
           }
         >
-          <circle cx={cx} cy={cy} r={6.5} fill={C.ink} />
-          <circle cx={cx - 2} cy={cy - 2.5} r={2.2} fill={C.white} />
+          <circle cx={cx} cy={cy} r={7.6} fill={C.ink} />
+          <circle cx={cx - 2.6} cy={cy - 3.2} r={2.8} fill={C.white} />
         </motion.g>
       </motion.g>
     </motion.g>
@@ -322,6 +328,13 @@ function Eye({
 function Mouth({ type }: { type: string }) {
   const beak = <path d="M101 123 L119 123 L110 137 Z" fill={C.beak} />;
   switch (type) {
+    case "softSmile":
+      return (
+        <>
+          {beak}
+          <path d="M103 141 Q110 147 117 141" stroke={C.mouth} strokeWidth="3" strokeLinecap="round" fill="none" opacity={0.85} />
+        </>
+      );
     case "smile":
       return (
         <>
