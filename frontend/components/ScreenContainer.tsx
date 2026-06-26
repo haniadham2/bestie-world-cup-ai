@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
+import FloatingBackdrop from "./FloatingBackdrop";
 
 interface ScreenContainerProps {
   children: ReactNode;
@@ -28,12 +29,13 @@ export default function ScreenContainer({
       exit={{ opacity: 0, y: -16 }}
       transition={{ duration: 0.35, ease: "easeOut" }}
       className={cn(
-        "min-h-[100dvh] w-full",
+        "relative min-h-[100dvh] w-full overflow-hidden",
         gradient && `bg-gradient-to-b ${gradient}`,
         className
       )}
     >
-      <div className="mx-auto flex min-h-[100dvh] w-full max-w-md flex-col px-5 pb-12 pt-2 sm:px-6 md:max-w-xl">
+      <FloatingBackdrop />
+      <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-md flex-col px-5 pb-12 pt-2 sm:px-6 md:max-w-xl">
         {children}
       </div>
     </motion.main>

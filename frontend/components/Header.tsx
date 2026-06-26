@@ -30,7 +30,9 @@ export default function Header({ title, showBack, className }: HeaderProps) {
           type="button"
           aria-label="Go back"
           onClick={() => router.back()}
-          whileTap={{ scale: 0.9 }}
+          whileHover={{ scale: 1.08, x: -2 }}
+          whileTap={{ scale: 0.88, rotate: -8 }}
+          transition={{ type: "spring", stiffness: 400, damping: 15 }}
           className="grid h-11 w-11 place-items-center rounded-full bg-white text-xl shadow-soft"
         >
           ←

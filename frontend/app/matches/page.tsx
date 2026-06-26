@@ -23,11 +23,23 @@ export default function MatchesPage() {
     <ScreenContainer gradient="from-cream to-sky/40">
       <Header title="Pick a match" showBack />
 
-      <div className="mt-2 mb-6 px-1">
+      <motion.div
+        className="mt-2 mb-6 flex items-center gap-2 px-1"
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.4 }}
+      >
         <p className="text-base font-bold text-ink/60">
-          Who are we cheering for today? 🎉
+          Who are we cheering for today?
         </p>
-      </div>
+        <motion.span
+          aria-hidden="true"
+          animate={{ rotate: [0, 18, -12, 0], scale: [1, 1.15, 1] }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+        >
+          🎉
+        </motion.span>
+      </motion.div>
 
       <div className="flex flex-col gap-5">
         {MATCHES.map((match, i) => (

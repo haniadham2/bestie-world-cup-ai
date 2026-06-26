@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import ScreenContainer from "@/components/ScreenContainer";
 import Header from "@/components/Header";
-import MascotPlaceholder from "@/components/MascotPlaceholder";
+import Bestie, { type BestieMood } from "@/components/Bestie";
 import MomentButton from "@/components/MomentButton";
 import PersonalityPicker from "@/components/PersonalityPicker";
 import ResponseCard, { type ResponseStatus } from "@/components/ResponseCard";
@@ -14,6 +14,22 @@ import { getMatchById } from "@/lib/matches";
 import { askBestie } from "@/services/bestie";
 import { usePersonality } from "@/hooks/usePersonality";
 import type { Moment } from "@/types";
+
+/** Maps a tapped moment to Bestie's reaction once the reply lands. */
+function reactionForMoment(momentId?: string): BestieMood {
+  switch (momentId) {
+    case "goal":
+      return "goal";
+    case "yellow-card":
+      return "yellow";
+    case "red-card":
+      return "red";
+    case "var":
+      return "var";
+    default:
+      return "idle";
+  }
+}
 
 /**
  * Companion screen — Bestie sits next to you during the match.
@@ -32,6 +48,14 @@ export default function CompanionPage() {
   const matchLabel = match
     ? `${match.home.name} vs ${match.away.name}`
     : "this match";
+
+  // Bestie's expression follows the conversation.
+  const mood: BestieMood =
+    status === "thinking"
+      ? "thinking"
+      : status === "done"
+        ? reactionForMoment(activeMoment?.id)
+        : "idle";
 
   const handleMoment = async (moment: Moment) => {
     if (status === "thinking") return; // ignore taps while Bestie is replying
@@ -58,7 +82,7 @@ export default function CompanionPage() {
       <Header showBack />
 
       <div className="flex flex-col items-center gap-3 text-center">
-        <MascotPlaceholder size="lg" />
+        <Bestie mood={mood} size={200} />
         <h1 className="text-3xl font-extrabold text-ink sm:text-4xl">
           Bestie is watching with you
         </h1>
@@ -93,8 +117,13 @@ export default function CompanionPage() {
         transition={{ delay: 0.15, duration: 0.4 }}
         className="mt-7 grid grid-cols-2 gap-4 sm:grid-cols-3"
       >
-        {MOMENTS.map((moment) => (
-          <MomentButton key={moment.id} moment={moment} onPress={handleMoment} />
+        {MOMENTS.map((moment, i) => (
+          <MomentButton
+            key={moment.id}
+            moment={moment}
+            onPress={handleMoment}
+            index={i}
+          />
         ))}
       </motion.div>
     </ScreenContainer>
