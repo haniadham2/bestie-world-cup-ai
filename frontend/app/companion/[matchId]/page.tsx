@@ -1,28 +1,52 @@
 "use client";
 
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import { motion } from "framer-motion";
 import ScreenContainer from "@/components/ScreenContainer";
 import Header from "@/components/Header";
 import MascotPlaceholder from "@/components/MascotPlaceholder";
 import MomentButton from "@/components/MomentButton";
-import Toast from "@/components/Toast";
-import { useToast } from "@/hooks/useToast";
+import ResponseCard, { type ResponseStatus } from "@/components/ResponseCard";
 import { MOMENTS } from "@/lib/moments";
 import { getMatchById } from "@/lib/matches";
+import { askBestie } from "@/services/bestie";
 import type { Moment } from "@/types";
 
 /**
  * Companion screen — Bestie sits next to you during the match.
- * Sprint 1: tapping a moment just shows a "Coming in Sprint 2" toast.
+ * Tapping a moment asks the AI and shows the reply in an animated card.
  */
 export default function CompanionPage() {
   const params = useParams<{ matchId: string }>();
   const match = getMatchById(params.matchId);
-  const { toast, showToast } = useToast();
 
-  const handleMoment = (_moment: Moment) => {
-    showToast("Coming in Sprint 2 ✨");
+  const [status, setStatus] = useState<ResponseStatus>("idle");
+  const [reply, setReply] = useState("");
+  const [activeMoment, setActiveMoment] = useState<Moment | null>(null);
+
+  const matchLabel = match
+    ? `${match.home.name} vs ${match.away.name}`
+    : "this match";
+
+  const handleMoment = async (moment: Moment) => {
+    if (status === "thinking") return; // ignore taps while Bestie is replying
+
+    setActiveMoment(moment);
+    setReply("");
+    setStatus("thinking");
+
+    try {
+      const text = await askBestie({
+        match: matchLabel,
+        moment: moment.label,
+        vibe: "Friendly Bestie",
+      });
+      setReply(text);
+      setStatus("done");
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -45,6 +69,15 @@ export default function CompanionPage() {
         </p>
       </div>
 
+      {/* Bestie's animated reply lives right under the intro. */}
+      <div className="mt-5 min-h-[1px]">
+        <ResponseCard
+          status={status}
+          reply={reply}
+          momentLabel={activeMoment?.label}
+        />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -55,8 +88,6 @@ export default function CompanionPage() {
           <MomentButton key={moment.id} moment={moment} onPress={handleMoment} />
         ))}
       </motion.div>
-
-      <Toast message={toast.message} visible={toast.visible} />
     </ScreenContainer>
   );
 }

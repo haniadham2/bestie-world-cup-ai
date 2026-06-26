@@ -25,3 +25,18 @@ export interface Moment {
   label: string;
   emoji: string;
 }
+
+/** The tone Bestie speaks in. Room to grow in later sprints. */
+export type Vibe = "Friendly Bestie";
+
+/** Request body sent to POST /api/bestie. */
+export interface BestieRequest {
+  match: string;
+  moment: string;
+  vibe: Vibe;
+}
+
+/** Successful response from POST /api/bestie. */
+export interface BestieResponse {
+  reply: string;
+}
