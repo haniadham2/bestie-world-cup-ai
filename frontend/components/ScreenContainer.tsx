@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/cn";
-import FloatingBackdrop from "./FloatingBackdrop";
+import StadiumBackdrop from "./StadiumBackdrop";
 
 interface ScreenContainerProps {
   children: ReactNode;
@@ -34,7 +34,7 @@ export default function ScreenContainer({
         className
       )}
     >
-      <FloatingBackdrop />
+      <StadiumBackdrop />
       <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-md flex-col px-5 pb-12 pt-2 sm:px-6 md:max-w-xl">
         {children}
       </div>

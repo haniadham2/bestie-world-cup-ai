@@ -15,7 +15,23 @@ export default function LandingPage() {
 
   return (
     <ScreenContainer gradient="from-lavender via-sky to-mint">
-      <div className="flex flex-1 flex-col items-center justify-center gap-8 text-center">
+      <div className="flex flex-1 flex-col items-center justify-center gap-7 text-center">
+        {/* World Cup framing — sets the context the instant the app opens. */}
+        <motion.span
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-ink/70 shadow-soft backdrop-blur"
+        >
+          <motion.span
+            animate={{ rotate: [0, 360] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+          >
+            ⚽️
+          </motion.span>
+          World Cup Companion
+        </motion.span>
+
         <Bestie mood="idle" size={240} />
 
         <motion.div
@@ -25,14 +41,14 @@ export default function LandingPage() {
           className="space-y-3"
         >
           <motion.h1
-            className="text-5xl font-extrabold tracking-tight text-ink"
+            className="text-6xl font-black tracking-tight text-ink"
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 300, damping: 12 }}
           >
             Meet Bestie
           </motion.h1>
-          <p className="text-lg font-bold text-ink/70">
+          <p className="text-xl font-bold text-ink/70">
             Your AI Bestie for the World Cup
           </p>
         </motion.div>

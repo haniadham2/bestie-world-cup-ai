@@ -24,8 +24,8 @@ export default function MatchCard({ match, onSelect }: MatchCardProps) {
       aria-label={`Watch ${home.name} versus ${away.name}`}
       className="group overflow-hidden p-0"
     >
-      {/* Kickoff strip with a slow light shimmer. */}
-      <div className={`relative overflow-hidden bg-gradient-to-r ${gradient} px-5 py-3`}>
+      {/* Kickoff strip with a slow light shimmer + live badge. */}
+      <div className={`relative flex items-center justify-between overflow-hidden bg-gradient-to-r ${gradient} px-5 py-3`}>
         <motion.span
           aria-hidden="true"
           className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -skew-x-12 bg-white/30 blur-md"
@@ -33,6 +33,16 @@ export default function MatchCard({ match, onSelect }: MatchCardProps) {
           transition={{ duration: 1.4, repeat: Infinity, repeatDelay: 3.5, ease: "easeInOut" }}
         />
         <span className="relative text-sm font-bold text-white/90">{kickoff}</span>
+        <span className="relative flex items-center gap-1.5 rounded-full bg-black/20 px-2.5 py-1">
+          <motion.span
+            className="h-1.5 w-1.5 rounded-full bg-white"
+            animate={{ opacity: [1, 0.3, 1], scale: [1, 1.4, 1] }}
+            transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <span className="text-[10px] font-black uppercase tracking-widest text-white">
+            Live soon
+          </span>
+        </span>
       </div>
 
       <div className="flex items-center justify-between gap-3 px-6 py-6">

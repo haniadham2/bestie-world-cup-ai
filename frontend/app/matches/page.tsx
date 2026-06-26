@@ -21,27 +21,33 @@ export default function MatchesPage() {
 
   return (
     <ScreenContainer gradient="from-cream to-sky/40">
-      <Header title="Pick a match" showBack />
+      <Header showBack />
 
       <motion.div
-        className="mt-2 mb-6 flex items-center gap-2 px-1"
-        initial={{ opacity: 0, x: -10 }}
-        animate={{ opacity: 1, x: 0 }}
+        className="mb-7 mt-1 px-1"
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
       >
-        <p className="text-base font-bold text-ink/60">
+        <span className="text-xs font-black uppercase tracking-[0.18em] text-ink/45">
+          Today&rsquo;s fixtures
+        </span>
+        <h1 className="mt-1 flex items-center gap-2 text-4xl font-black tracking-tight text-ink">
+          Pick a match
+          <motion.span
+            aria-hidden="true"
+            animate={{ rotate: [0, 18, -12, 0], scale: [1, 1.15, 1] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+          >
+            ⚽️
+          </motion.span>
+        </h1>
+        <p className="mt-1 text-base font-bold text-ink/55">
           Who are we cheering for today?
         </p>
-        <motion.span
-          aria-hidden="true"
-          animate={{ rotate: [0, 18, -12, 0], scale: [1, 1.15, 1] }}
-          transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-        >
-          🎉
-        </motion.span>
       </motion.div>
 
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-6">
         {MATCHES.map((match, i) => (
           <motion.div
             key={match.id}

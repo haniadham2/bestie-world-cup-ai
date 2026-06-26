@@ -17,6 +17,11 @@ const config: Config = {
         lavender: "#D6C7FF",
         sunny: "#FFE08A",
         ink: "#3A3258",
+        // Stadium / pitch accents (used softly for football identity)
+        grass: "#9BE8A6",
+        pitch: "#5FC979",
+        turf: "#3FAE5A",
+        night: "#241A52",
       },
       fontFamily: {
         sans: ["var(--font-nunito)", "system-ui", "sans-serif"],
