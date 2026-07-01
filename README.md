@@ -1,6 +1,9 @@
 <div align="center">
 
-# 🐥 Bestie
+<h1>
+  <img src="assets/bestie-mark.svg" alt="Bestie mascot" height="52" align="center" />
+  &nbsp;Bestie
+</h1>
 
 ### Watch the World Cup with Bestie
 
